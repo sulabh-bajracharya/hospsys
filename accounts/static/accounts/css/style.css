@@ -1,0 +1,40 @@
+.login-form {
+    width: 600px;
+    margin: 300px auto;
+    /* padding: 20px; */
+
+}
+.register-form {
+    margin: 20px auto;
+}
+.appointment-list {
+    list-style-type: none;
+}
+
+.appointment-details-info tr td:first-child{
+   font-weight: bold;
+   width: 150px;
+}
+
+.appointment-details-info tbody tr {
+    line-height: 0.8;
+}
+
+.appointment-details-table tr td:first-child {
+    font-weight: bold;
+    width: 250px;
+}
+
+.appointment-messages {
+    margin: 12px;
+    border-radius: 6px;
+    
+}
+
+.appointment-messages ul {
+    list-style-type: none;
+}
+
+.patient-actions li{
+    margin: 8px 0;
+}

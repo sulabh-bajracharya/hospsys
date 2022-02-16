@@ -1,0 +1,112 @@
+{% extends 'accounts/layouts/starter.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block content %}
+   
+<div class="row mb-2">
+    <div class="col-sm-6">
+    <h1 class="m-0">
+        Doctor Dashboard
+    </h1>
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+</div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<div class="content">
+<div class="container-fluid">
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary">
+              <h3 class="card-title">Scheduled Appointments</h3>
+            </div>
+            <!-- ./card-header -->
+            <div class="card-body">
+              <table class="table table-bordered table-hover appointment-table">
+                <thead>
+                  <tr class="row">
+                    <th class="col-1">#</th>
+                    <th class="col-4">Patient Name</th>
+                    <th class="col-2">Date</th>
+                    <th class="col-2">Time</th>
+                    <th class="col-2">Reason</th>
+                    <th class="col-1">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        <tr data-widget="expandable-table" aria-expanded="false" class="row">
+                          <td class="col-1">
+                            <a href="#" style="margin-left: 20px;"><i class="fas fa-edit"></i></a>                            
+                          </td>
+                          <td class="col-4">{{ appointment.patient.get_full_name.title }}</td>
+                          <td class="col-2">{{ appointment.appointment_date }}</td>
+                          <td class="col-2">{{ appointment.appointment_time }}</td>
+                          <td class="col-2">{{ appointment.reason.capitalize }}</td>
+                          <td class="col-1">{{ appointment.approval_status.title }}</td>
+                        </tr>
+                        <tr class="expandable-body row">
+                          <td class="col-11">
+                              <p>{{ appointment.description }}</p>
+
+                          </td>
+                          <td class="col-1">
+                            <form method="post" action="{% url 'appointments:set_approval_status' appointment.id %}" style="margin: 10px;">
+                              {% csrf_token %}
+                              <input type="submit" name="approval_status" class="btn btn-success" style="margin: 10px;" value="Approve">
+                              <input type="submit" name="approval_status" class="btn btn-danger" style="margin: 10px;" value="Reject">
+                              <input type="submit" name="approval_status" class="btn btn-secondary" style="margin: 10px;" value="Pending">
+
+                            </form>
+                          </td>
+                        </tr>
+                    {% endfor %}
+                  
+
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+        <!-- /.row -->
+        <div class="row">
+
+            {% comment %} <div class="col-lg-8">
+
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                    <h5 class="m-0">Appointments</h5>
+                    </div>
+                    <div class="card-body">
+                    
+                    </div>
+                </div>
+                </div>
+            <!-- /.col-md-6 --> {% endcomment %}
+
+            <div class="col-lg-1"></div>
+            
+            <div class="col-lg-3">
+
+            
+            </div>
+            <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
+
+{% endblock content %}

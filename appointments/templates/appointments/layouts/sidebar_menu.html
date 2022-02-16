@@ -1,0 +1,42 @@
+{% if request.user.is_doctor %}
+<!-- Sidebar Menu -->
+<nav class="mt-2">
+<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+  <li class="nav-item">
+      <a href="{% url 'accounts:edit_working_shifts' %}" class="nav-link">
+        <i class="nav-icon far fa-image"></i>
+        <p>
+          View/Edit Working Hours
+        </p>
+      </a>
+  </li>
+</ul>
+</nav>
+<!-- /.sidebar-menu -->
+{% endif %}
+
+
+{% if request.user.is_patient %}
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-item">
+          <a href="{% url 'appointments:create_appointment' %}" class="nav-link">
+            <i class="nav-icon far fa-image"></i>
+            <p>
+              Make Appointments
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="{% url 'appointments:doctor_availability' %}" class="nav-link">
+            <i class="nav-icon far fa-image"></i>
+            <p>
+              Check Doctor Availablility
+            </p>
+          </a>
+        </li>
+           
+    </ul>
+    </nav>
+{% endif %}

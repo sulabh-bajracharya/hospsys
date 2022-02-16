@@ -1,0 +1,72 @@
+{% extends 'accounts/layouts/starter.html' %}
+
+{% block content %}
+    
+    
+    <table id="chat-log-table" class="table table-striped">
+        <!-- <tr class="row">
+            <td class="col-2"></td>
+            <td class="col-10"></td>
+        </tr> -->
+        
+    </table>
+    <!-- <textarea id="chat-log-textarea" cols="100" rows="20"></textarea><br> -->
+    <input type="hidden" value="{{ request.user.first_name.title }}" id="username">
+    <input id="chat-message-input" type="text" size="100" class="form-control"><br>
+    <input id="chat-message-submit" type="button" value="Send" class="btn btn-success">
+
+    {{ room_name|json_script:"room-name" }}
+    <script>
+        const userName = document.querySelector('#username').value;
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/video_chat/'
+            + roomName
+            + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            // document.querySelector('#chat-log').value += (data.user + ': ' + data.message + '\n');
+            // var newMessage = document.createElement('li');
+            // newMessage.appendChild(document.createTextNode(data.message));
+            // document.querySelector('#chat-log').appendChild(newMessage);
+            var chatTable = document.querySelector('#chat-log-table');
+            var newChatRow = document.createElement('tr');
+            var chatUser = newChatRow.appendChild(document.createElement('td'));
+            chatUser.style.width = '100px';
+            chatUser.style.color= 'gray';
+            // var me = data.User;
+            var chatMessage = newChatRow.appendChild(document.createElement('td'));
+            if (data.user == userName){
+                newChatRow.style.backgroundColor = 'rgba(33,33,33,0.2)';
+            }
+            chatUser.appendChild(document.createTextNode(data.user == userName ? 'Me': data.user));
+            chatMessage.appendChild(document.createTextNode(data.message));
+            chatTable.appendChild(newChatRow);
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly',e);
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'user': userName,
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+{% endblock %}

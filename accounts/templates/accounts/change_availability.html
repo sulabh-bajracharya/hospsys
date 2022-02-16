@@ -1,0 +1,65 @@
+{% extends 'accounts/layouts/starter.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Working Hours {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h3>Edit Working Shifts</h3>
+        </div>
+        
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header bg-secondary">
+                    <h5 class="card-title">Current Working Shifts</h5>
+                </div>
+                <div class="card-body">
+                    <table name="view-availability-table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-6">Working Days</th>
+                                <th class="col-3">Shift Start Time</th>
+                                <th class="col-3">Shift End Time</th>
+            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shift in working_shifts %}
+                                <tr>
+                                    <td>{{ shift.working_day.title }}</td>
+                                    <td>{{ shift.start_time }}</td>
+                                    <td>{{ shift.end_time }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+            
+                    </table>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h5 class="card-title">Add or Edit Working Shifts</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="form">
+                        {% csrf_token %}
+                        {{ form.as_table }}       
+        
+                        <input type="submit" value="Save" class="btn btn-primary">
+                    </form>
+                </div>"
+                
+            </div>
+           
+        </div>
+    
+    </div>
+    
+</div>
+{% endblock content %}

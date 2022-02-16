@@ -1,0 +1,50 @@
+{% extends 'accounts/layouts/starter.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Create Appointment{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-primary">
+                <h4 class="card-title">Create Appointment</h4>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
+                    <p class="alert alert-warning">{{ message }}</p>
+
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input type="submit" value="Create Appointment">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var doctorname = document.getElementById('id_doctor');
+    console.log(doctorname);
+    var doctor = document.querySelector('#doctor-available-hours');
+    doctorname.addEventListener('change', function(){
+        var loc = window.location;
+        var endPoint = 'ws://' + loc.host + loc.pathname;
+        var webSocket = new WebSocket(endPoint);
+
+        webSocket.addEventListener('open', ()=> {
+            console.log("Websocket connection for doctor open.");
+        });
+        webSocket.addEventListener('close', ()=> {
+            console.log("Websocket connection for doctor closed.");
+        });
+
+    });
+</script>
+{% endblock content %}

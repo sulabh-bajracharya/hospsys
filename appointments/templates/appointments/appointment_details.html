@@ -1,0 +1,114 @@
+{% extends 'accounts/layouts/starter.html' %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h5 class="m-0">Appointment Details</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-6">
+                            <table id="" class="table table-bordered appointment-details-info patient-info">
+                                <thead>
+                                    <tr>
+                                        <td colspan="2">Patient Information</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td>{{ appointment.patient.get_full_name.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>{{ appointment.patient.patientprofile.get_full_address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contact No:</td>
+                                        <td>{{ appointment.patient.get_full_name.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td>{{ appointment.patient.email }}</td>
+                                    </tr>
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <table id="" class="table table-bordered appointment-details-info doctor-info">
+                                <thead>
+                                    <tr>
+                                        <td colspan="2">Doctor Information</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td>{{ appointment.doctor.get_full_name.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>{{ appointment.doctor.doctorprofile.get_full_address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contact No:</td>
+                                        <td>{{ appointment.doctor.get_full_name.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td>{{ appointment.doctor.email }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="" class="table table-bordered appointment-details-table">
+                                <thead>
+                                    <tr>
+                                        <td colspan="2">Appointment Details</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Reason:</td>
+                                        <td>{{ appointment.reason }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description:</td>
+                                        <td>{{ appointment.description }}</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <a class="btn btn-lg btn-success" href={% url 'video_chat:video' %}>Join Call</a>
+                        </div>
+                        <div class="col-12">
+                            <a class="float-right" href={% url 'appointments:delete_appointment' appointment.id %}>Delete this appointment</a>
+                        </div>
+                        
+                    </div>
+                        
+                </div> <!-- card body-->
+            </div> <!-- card -->
+        </div> <!-- col-md-12 -->
+    </div> <!-- row -->
+    
+
+    
+</div> <!-- container -->
+
+{% endblock content %}
