@@ -8,7 +8,7 @@ from appointments.models import Appointment
 
 # Create your views here.
 def index(request):
-    return HttpResponse("inces pasegfe")
+    return HttpResponse("index page.")
 
 def register(request):
     if request.method == 'POST':
@@ -45,8 +45,13 @@ def dashboard(request):
         return HttpResponseRedirect(reverse('accounts:login'))
 
 def view_working_shifts(request):
-    working_shifts = WorkingShift.objects.filter(doctor_profile = request.user.doctorprofile)
-    return render(request, 'accounts/view_availability.html', {'working_shifts': working_shifts})
+    if request.user.is_authenticated:
+        if request.user.user_type == 'doctor':
+            working_shifts = WorkingShift.objects.filter(doctor_profile = request.user.doctorprofile)
+            return render(request, 'accounts/view_availability.html', {'working_shifts': working_shifts})
+        else:
+            return HttpResponseRedirect(reverse('accounts:dashboard'))
+    
 
 # def change_availability(request):
 #     if request.method == 'POST':
@@ -88,26 +93,31 @@ def view_working_shifts(request):
 
 
 def edit_working_shifts(request):
-    if request.method == 'POST':
-        form = DoctorWorkingShiftForm(request.POST)
+    if request.user.is_authenticated:
+        if request.user.user_type == 'doctor':
+            if request.method == 'POST':
+                form = DoctorWorkingShiftForm(request.POST)
 
-        if form.is_valid():
-            doctor_profile = request.user.doctorprofile
-            working_day = form.cleaned_data['working_day']
-            start_time = form.cleaned_data['start_time']
-            end_time = form.cleaned_data['end_time']
-            obj, created = WorkingShift.objects.update_or_create(doctor_profile=doctor_profile, working_day=working_day, defaults = {'start_time':start_time, 'end_time': end_time})
-            # obj = form.save(commit=False)
-            # obj.doctor_profile = doctor_profile
-            # obj.save()
-            if obj:
-                return HttpResponseRedirect(reverse('accounts:edit_working_shifts'))
+                if form.is_valid():
+                    doctor_profile = request.user.doctorprofile
+                    working_day = form.cleaned_data['working_day']
+                    start_time = form.cleaned_data['start_time']
+                    end_time = form.cleaned_data['end_time']
+                    obj, created = WorkingShift.objects.update_or_create(doctor_profile=doctor_profile, working_day=working_day, defaults = {'start_time':start_time, 'end_time': end_time})
+                    # obj = form.save(commit=False)
+                    # obj.doctor_profile = doctor_profile
+                    # obj.save()
+                    if obj:
+                        return HttpResponseRedirect(reverse('accounts:edit_working_shifts'))
 
-    else:
-        form = DoctorWorkingShiftForm()
-        working_shifts = WorkingShift.objects.filter(doctor_profile = request.user.doctorprofile)
-        context = {
-            'form': form,
-            'working_shifts': working_shifts,
-        }
-    return render(request, 'accounts/change_availability.html', context)        
+            else:
+                form = DoctorWorkingShiftForm()
+                working_shifts = WorkingShift.objects.filter(doctor_profile = request.user.doctorprofile)
+                context = {
+                    'form': form,
+                    'working_shifts': working_shifts,
+                }
+            return render(request, 'accounts/change_availability.html', context)
+        else:
+            return HttpResponseRedirect(reverse('accounts:dashboard'))
+            

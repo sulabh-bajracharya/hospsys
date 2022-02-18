@@ -18,4 +18,4 @@ def create_doctor_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=DoctorProfile)
 def create_doctor_availability(sender, instance, created, **kwargs):
     if created:
-        DoctorAvailability.objects.create(doctor=instance, available_days = [])
+        DoctorAvailability.objects.create(doctor_profile=instance)

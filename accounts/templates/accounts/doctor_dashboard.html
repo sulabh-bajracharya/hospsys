@@ -61,6 +61,8 @@
                           <td class="col-11">
                               <p>{{ appointment.description }}</p>
 
+                              <p><a href="{% url 'video_chat:video' %}" class="btn btn-success">Join Call</a></p>
+
                           </td>
                           <td class="col-1">
                             <form method="post" action="{% url 'appointments:set_approval_status' appointment.id %}" style="margin: 10px;">
