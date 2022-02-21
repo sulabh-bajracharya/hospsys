@@ -33,6 +33,7 @@
                                     <td>{{ shift.working_day }}</td>
                                     <td>{{ shift.start_time }}</td>
                                     <td>{{ shift.end_time }}</td>
+                                    <td><a href="{% url 'appointments:create_appointment' doctor.id %}" class="btn btn-sm btn-primary">Make an appointment</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>

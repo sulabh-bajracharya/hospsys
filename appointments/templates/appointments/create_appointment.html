@@ -7,6 +7,47 @@
     <div class="col-lg-6">
         <div class="card">
             <div class="card-header bg-primary">
+                <h4 class="card-title">Doctor Availability</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ availability_form|crispy }}
+                    <input type="submit" name="availability_submit" value="View Availability">
+                </form>
+                <br>
+
+                <div class="doctor-availability">
+                    <table name="view-availability-table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-6">Working Days</th>
+                                <th class="col-3">Shift Start Time</th>
+                                <th class="col-3">Shift End Time</th>
+        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shift in working_shifts %}
+                                <tr>
+                                    <td>{{ shift.working_day }}</td>
+                                    <td>{{ shift.start_time }}</td>
+                                    <td>{{ shift.end_time }}</td>
+                                  
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+<div class="row">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-primary">
                 <h4 class="card-title">Create Appointment</h4>
             </div>
             <div class="card-body">
@@ -21,8 +62,8 @@
                 {% endif %}
                 <form method="post">
                     {% csrf_token %}
-                    {{ form|crispy }}
-                    <input type="submit" value="Create Appointment">
+                    {{ create_form|crispy }}
+                    <input type="submit" name="create_appointment_submit" value="Create Appointment">
                 </form>
             </div>
         </div>

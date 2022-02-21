@@ -153,3 +153,9 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'sulabh.db@gmail.com'
+EMAIL_HOST_PASSWORD = 'Coplien10@sdb'
+EMAIL_PORT = 587

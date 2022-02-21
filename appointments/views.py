@@ -11,37 +11,63 @@ from django.views import generic
 def index(request):
     return HttpResponse("Appointment page")
 
+def choose_doctor(request):
+    return render(request, 'appointments/choose_doctor.html')
+
 def create(request):
     if request.method == 'POST':
-        form = CreateAppointmentForm(request.POST)
-        if form.is_valid():
-            doctor = form.cleaned_data['doctor']
-            patient = request.user
-            appointment_date = form.cleaned_data['appointment_date']
-            appointment_time = form.cleaned_data['appointment_time']
-            reason = form.cleaned_data['reason']
-            description = form.cleaned_data['description']
+        if 'availability_submit' in request.POST:
+            availability_form = DoctorAvailabilityForm(request.POST)
+            create_form = CreateAppointmentForm()
+            
+            if availability_form.is_valid():
+                doctor = availability_form.cleaned_data['doctor']
+                doctor_query = User.objects.get(email=doctor.email)
+                shifts = WorkingShift.objects.filter(doctor_profile=doctor_query.doctorprofile)
 
-            try:
-                existing_appointment = Appointment.objects.get(doctor=doctor, patient=patient)
-            except Appointment.DoesNotExist:
-                existing_appointment = None
+                context = {
+                    'create_form': create_form,
+                    'availability_form': availability_form,
+                    'working_shifts': shifts,
+                    'doctor': doctor,
+                }
+                return render(request, 'appointments/create_appointment.html', context)
 
-            if existing_appointment is not None:
-                # messages.add_message(request, messages.ERROR, 'Appointment with doctor already exists.')
-                messages.error(request,'Appointment with doctor already exists.')
+    #     form = CreateAppointmentForm(request.POST)
+    #     if form.is_valid():
+    #         doctor = form.cleaned_data['doctor']
+    #         patient = request.user
+    #         appointment_date = form.cleaned_data['appointment_date']
+    #         appointment_time = form.cleaned_data['appointment_time']
+    #         reason = form.cleaned_data['reason']
+    #         description = form.cleaned_data['description']
 
-                return HttpResponseRedirect(reverse('appointments:create_appointment'))
-            else:
-                obj, created = Appointment.objects.update_or_create(patient = patient, doctor=doctor,defaults={'doctor':doctor, 'appointment_date':appointment_date, 'appointment_time': appointment_time, 'reason':reason, 'description':description})
-                if created:
-                    return HttpResponseRedirect(reverse('accounts:dashboard'))
-        else:
-            messages.add_message(request, messages.ERROR, 'Invalid data')
-            return render(request, 'accounts/patient_dashboard.html')
+    #         try:
+    #             existing_appointment = Appointment.objects.get(doctor=doctor, patient=patient)
+    #         except Appointment.DoesNotExist:
+    #             existing_appointment = None
+
+    #         if existing_appointment is not None:
+    #             # messages.add_message(request, messages.ERROR, 'Appointment with doctor already exists.')
+    #             messages.error(request,'Appointment with doctor already exists.')
+
+    #             return HttpResponseRedirect(reverse('appointments:create_appointment'))
+    #         else:
+    #             obj, created = Appointment.objects.update_or_create(patient = patient, doctor=doctor,defaults={'doctor':doctor, 'appointment_date':appointment_date, 'appointment_time': appointment_time, 'reason':reason, 'description':description})
+    #             if created:
+    #                 return HttpResponseRedirect(reverse('accounts:dashboard'))
+    #     else:
+    #         messages.add_message(request, messages.ERROR, 'Invalid data')
+    #         return render(request, 'accounts/patient_dashboard.html')
     else:
-        form = CreateAppointmentForm()
-    return render(request, 'appointments/create_appointment.html', {'form': form})
+        create_form = CreateAppointmentForm()
+        availability_form = DoctorAvailabilityForm()
+
+        context = {
+            'create_form': create_form,
+            'availability_form': availability_form,
+        }
+    return render(request, 'appointments/create_appointment.html', context)
 
 def doctor_availability(request):
     if request.method == 'POST':
@@ -50,7 +76,7 @@ def doctor_availability(request):
             doctor = form.cleaned_data['doctor']
             doctor_query = User.objects.get(email=doctor.email)
             shifts = WorkingShift.objects.filter(doctor_profile=doctor_query.doctorprofile)
-            return render(request, 'appointments/check_doctor_availability.html', {'form': form, 'working_shifts': shifts})
+            return render(request, 'appointments/check_doctor_availability.html', {'form': form, 'working_shifts': shifts, 'doctor': doctor})
     else:
         form = DoctorAvailabilityForm()
     return render(request, 'appointments/check_doctor_availability.html', {'form': form})

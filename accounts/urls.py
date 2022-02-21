@@ -9,5 +9,6 @@ urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('working_shifts/edit/', views.edit_working_shifts, name='edit_working_shifts'),
     path('working_shifts/', views.view_working_shifts, name='view_working_shifts'),
+    path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
     # path('', views.index),
 ]
