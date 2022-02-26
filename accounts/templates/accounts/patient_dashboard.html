@@ -1,5 +1,5 @@
 {% extends 'accounts/layouts/starter.html' %}
-
+{% load static %}
 {% block title %} Dashboard {% endblock %}
 
 {% block content %}
@@ -17,36 +17,37 @@
       </ol>
     </div><!-- /.col -->
   </div><!-- /.row -->
+
+  <div class="row">
+    {% if current_user.patientprofile.profile_incomplete %}
+    <div class="alert alert-warning alert-dismissible fade show col-8" role="alert">
+      Please complete your profile.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %}
+  </div>
 </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+
+
 
 <!-- Main content -->
 <div class="content">
 <div class="container-fluid">
   <div class="row">
   
-    <div class="col-md-8">
-      <div class="card card-primary card-outline">
-        <div class="card-header bg-primary">
-          <h5 class="m-0">My Appointments</h5>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="p-2">Your Appointments</h5>
         </div>
         <div class="row appointment-messages">
             {% if messages %}
-            <!-- <div class="col-6 alert alert-warning alert-dismissable fade show" role="alert"">
-            
-              <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-              </ul>
-
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div> -->
             {% for message in messages %}
-            <div class="alert alert-warning alert-dismissible fade show col-8" role="alert">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
               {{message}}
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -56,40 +57,32 @@
 
             {% endif %}
         </div>
-        
+        <div class="row">
         {% for appointment in appointments %}
-
-        <div class="card-body">
-          <h6 class="card-title">
-            Appointment with <span class="">Dr. {{ appointment.doctor.get_full_name.title}}</span> on {{appointment.appointment_date}} {{ appointment.appointment_time}}
-          </h6>
-          <p class="card-text float-left">               
-            Department: <span>{{ appointment.doctor.doctorprofile.department }}</span>
-          </p>
-           
-            <a href="{% url 'appointments:view_details' appointment.id %}" class="btn btn-primary float-right">View Details</a>
-        
+        <div class="col-2">
+          <div class="card m-4 appointment-card" style="width: 16rem;">
+            <div class="card-header {% if appointment.approval_status == 'approved'%}bg-success{% else %} bg-secondary {% endif %}">{{ appointment.approval_status.title }}</div>
+            <img class="card-img-top" src="{% static 'accounts/images/logos/logo-transparent.png' %}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title"><b>Dr. {{ appointment.doctor.get_full_name }}  &nbsp;|&nbsp;  </b> <br><small>{{ appointment.doctor.doctorprofile.department }}</small></h5>
+              <p class="card-text">
+                <ul style="list-style-type: none; padding-left: 0">
+                  <li><b>Date:</b> {{ appointment.appointment_date }}</li>
+                  <li><b>Time:</b> {{ appointment.timeslot }}</li>
+                </ul>
+              </p>
+              <a href="{% url 'appointments:view_details' appointment.id %}" id="btn-appointment-details" class="btn btn-primary" style="width: 100%;">View Details</a>
+            </div>
+          </div>
         </div>
-        <hr>
+       
+        
         {% endfor %}
+        </div>
+        
       </div>
     </div>
     <!-- /.col-md-6 -->
-    <div class="col-md-4">
-      <div class="card card-secondary card-outline">
-        <div class="card-header bg-secondary">
-          <h5 class="m-0">Actions</h5>
-        </div>
-        
-        <div class="card-body">
-          <ul class="patient-actions" style="list-style-type: none;">
-            <li><a href="{% url 'appointments:create_appointment' %}">Create an appointment...</a></li>
-            <!-- <li><a href="{% url 'appointments:doctor_availability' %}">Check for doctor availability...</a></li> -->
-          </ul>
-        </div>
-       
-      </div>
-    </div>
   </div>
   <!-- /.row -->
 

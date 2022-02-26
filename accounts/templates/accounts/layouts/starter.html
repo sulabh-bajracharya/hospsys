@@ -9,6 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %} {% endblock %}</title>
   {% load static %}
+  {% load cloudinary %} 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
@@ -54,7 +55,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="{% url 'accounts:dashboard' %}" class="brand-link">
       <img src="{% static 'accounts/images/logo_200x200.png'%}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">HospSys Dashboard</span>
     </a>
@@ -64,10 +65,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{% static 'accounts/images/logo_200x200.png'%}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ request.user.profile_image.url }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ request.user.get_full_name.title }}</a>
+          <a href="{% url 'accounts:profile' request.user.id %}" class="d-block">{{ request.user.get_full_name.title }}</a>
         </div>
       </div>
 

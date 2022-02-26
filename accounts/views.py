@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import RegistrationForm, DoctorWorkingShiftForm
+from .forms import RegistrationForm, DoctorWorkingShiftForm, RegistrationProfileForm, UpdateUserForm, PatientProfileForm, DoctorProfileForm
 from django.urls import reverse
 from .models import DoctorAvailability, DoctorProfile, WorkingShift, User
 from django.views.generic.edit import UpdateView
 from appointments.models import Appointment
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail, BadHeaderError
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
+from django.db.models.query_utils import Q
 
 # Create your views here.
 def index(request):
@@ -44,6 +47,13 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+def register_profile(request, user):
+    if request.method == 'POST':
+        pass
+    else:
+        form = RegistrationProfileForm()
+    return render(request, 'registration/register_profile.html', {'form': form})
+
 def activate(request, uidb64, token):
     try:
         uid = urlsafe_base64_decode(uidb64)
@@ -60,6 +70,35 @@ def activate(request, uidb64, token):
     else:
         return HttpResponse('Activation link is invalid!')
 
+def password_reset_request(request):
+	if request.method == "POST":
+		password_reset_form = PasswordResetForm(request.POST)
+		if password_reset_form.is_valid():
+			data = password_reset_form.cleaned_data['email']
+			associated_users = User.objects.filter(Q(email=data))
+			if associated_users.exists():
+				for user in associated_users:
+					subject = "Password Reset Requested"
+					email_template_name = "accounts/password/password_reset_email.txt"
+					c = {
+					"email":user.email,
+					'domain': get_current_site(request).domain,
+					'site_name': 'HospSys',
+					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
+					"user": user,
+					'token': default_token_generator.make_token(user),
+					'protocol': 'http',
+					}
+					email = render_to_string(email_template_name, c)
+					try:
+						send_mail(subject, email, 'admin@admin.com' , [user.email], fail_silently=False)
+					except BadHeaderError:
+						return HttpResponse('Invalid header found.')
+					return redirect ("/password_reset/done/")
+	password_reset_form = PasswordResetForm()
+	return render(request=request, template_name="accounts/password/password_reset.html", context={"password_reset_form":password_reset_form})
+
+@login_required
 def dashboard(request):
     if request.user.is_authenticated:
         user = request.user
@@ -73,7 +112,7 @@ def dashboard(request):
             }
             return render(request, 'accounts/doctor_dashboard.html', context)
         elif user.is_patient:
-            appointments = Appointment.objects.filter(patient = user)
+            appointments = Appointment.objects.filter(patient = user, approval_status__in = ['pending', 'approved'])
             context = {
                 'current_user': user,
                 'appointments': appointments,
@@ -84,6 +123,34 @@ def dashboard(request):
     else:
         return HttpResponseRedirect(reverse('accounts:login'))
 
+@login_required
+def profile(request, user_id):
+    if request.method == 'POST':
+        userform = UpdateUserForm(request.POST, request.FILES, instance=request.user)
+        if request.user.user_type == 'patient':
+            profileform = PatientProfileForm(request.POST, instance=request.user.patientprofile)
+        else:
+            profileform = DoctorProfileForm(request.POST, instance=request.user.doctorprofile)
+        if userform.is_valid() and profileform.is_valid():
+            userform.save()
+            profileform.save()
+            messages.success(request,"Profile successfully updated.")
+            return redirect('accounts:profile', user_id=request.user.id)
+    else:
+        userform = UpdateUserForm(instance=request.user)
+        if request.user.user_type == 'patient':
+            profileform = PatientProfileForm(instance=request.user.patientprofile)
+        else:
+            profileform = DoctorProfileForm(instance=request.user.doctorprofile)
+
+
+        context = {
+            'userform': userform,
+            'profileform': profileform,
+        }
+        return render(request, 'accounts/profile.html', context)
+        
+@login_required
 def view_working_shifts(request):
     if request.user.is_authenticated:
         if request.user.user_type == 'doctor':
@@ -131,7 +198,7 @@ def view_working_shifts(request):
 #         form = DoctorAvailabilityForm()
 #     return render(request, 'accounts/change_availability.html', {'form': form})
 
-
+@login_required
 def edit_working_shifts(request):
     if request.user.is_authenticated:
         if request.user.user_type == 'doctor':

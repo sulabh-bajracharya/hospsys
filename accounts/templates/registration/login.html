@@ -4,28 +4,41 @@
 
 {% block title %}Login{%endblock%}
 {% block content %}
-<section class="login-form card">
-    <div class="card-header">
-        <h3 class="text-center">Login to HospSys</h3>
-    </div>
-    <div class="card-body">
-        <form method="post">
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
-                    <p class="alert alert-warning">{{ message }}</p>
+{% load static %}
 
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" value="Login" class="btn btn-primary">
-        </form>
+    
+    <div class="logo-div text-center">
+        <img src="{% static 'accounts/images/logos/logo-black.png' %}" height="400" width="400">
     </div>
 
-    <p style="text-align: center;"><a href="{% url 'accounts:register' %}" class="card-link">Register a New Account Here...</a></p>
-   
-</section>
+    <section class="login-form card">
+        <div class="card-header">
+            <h3 class="text-center">Login to HospSys</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
+                        <p class="alert alert-warning">{{ message }}</p>
+    
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="Login" class="btn btn-primary">
+            </form>
+        </div>
+        <div style="text-align: center;">
+            <a href="{% url 'accounts:password_reset' %}" class="m-3">Forgot Password?</a><br>
+            <a href="{% url 'accounts:register' %}" class="m-3">Register a New Account Here...</a>
+        </div>
+       
+        
+    </section>
+
+
+
 {% endblock %}

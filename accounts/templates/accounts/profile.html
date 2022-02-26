@@ -1,0 +1,86 @@
+{% extends 'accounts/layouts/starter.html' %}
+{% load crispy_forms_tags %}
+{% load cloudinary %}
+
+
+{% block title %} Profile {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Profile</h3>
+                </div>
+                
+                <div class="card-body">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{message.tags}} alert-dismissible fade show col-12" role="alert">
+                            {{message}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                        {% endfor %}
+
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-secondary">
+                                    <h5 class="card-title">My Details</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" enctype="multipart/form-data">
+                                        <div class="profile_upper_div">
+                                            <img src="{{ request.user.profile_image.url }}" class="img-circle" height="200px" width="200px" style="margin: 20px;"><br>
+
+                                            <div class="profile_image_actions">
+                                                <input type="button" class="btn btn-small btn-success mr-3" value="Change Profile Picture" onclick="document.getElementById('profile_image_upload').click()">
+                                                <a class="btn btn-small btn-success" href="{{request.user.profile_image.url}}" target="_blank">View Profile Picture</a>
+                                            </div>
+                                        </div>
+                                        
+                                        {% csrf_token %}
+                                        {{ userform|crispy }}
+                                        {{ profileform|crispy }}
+
+                                        <input type="submit" class="btn btn-success" value="Save">
+                                    </form>
+                                  
+                                    
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-secondary">
+                                    <h5 class="card-title">Change Password</h5>
+                                </div>
+                                <div class="card-body">
+                                    <a href="{% url 'accounts:password_change' %}">Change Account Password</a>
+                                </div>
+    
+                            </div>
+                        </div>
+                        
+                    </div>
+                             
+                   
+                </div> <!-- card body -->
+            
+            </div> <!-- card -->
+        </div> <!-- col-6 -->
+        
+    </div><!-- row -->
+   
+    
+</div> <!-- container -->
+{% endblock content %}

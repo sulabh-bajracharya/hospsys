@@ -1,0 +1,67 @@
+{% extends 'accounts/layouts/starter.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header p-4">
+                    <h5 class="m-0">Doctors</h5>
+                </div>
+                <div class="card-body">
+                    {% for department in departments %}
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header p-3 bg-light">
+                                    <h5 class="m-0">{{department.name}}</h5>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        {% for doctor in doctors %}
+                                        {% if doctor.doctorprofile.department == department %}
+                                        <div class="col-2 m-3">
+                                            <div class="card m-4" style="width: 16rem; height: 400px">
+                                            {% comment %} <div class="card-header {% if appointment.approval_status == 'approved'%}bg-success{% else %} bg-secondary {% endif %}">{{ appointment.approval_status.title }}</div> {% endcomment %}
+                                            {% if doctor.profile_image %}
+                                            <img class="card-img-top p-3 img-circle" src="{{ doctor.profile_image.url }}" alt="Card image cap">
+                                            {% else %}
+                                            <img class="card-img-top p-3 img-circle" src="{% static 'accounts/images/default-user.png' %}" alt="Card image cap">
+                                            
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h5 class="card-title"><b>Dr. {{ doctor.get_full_name }} </b></h5>
+                                                <p class="card-text">
+                                                {% comment %} <ul style="list-style-type: none; padding-left: 0">
+                                                    <li><b>Date:</b> {{ appointment.appointment_date}}</li>
+                                                    <li><b>Time:</b> {{ appointment.appointment_time}}</li>
+                                                </ul> {% endcomment %}
+                                                </p>
+                                                <a href="{% url 'appointments:create_appointment' doctor.id %}" class="btn btn-info" style="width: 100%;">Create Appointment with {{ doctor.get_full_name.title }}</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                       
+                    </div>
+
+                    {% endfor %}
+                   
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

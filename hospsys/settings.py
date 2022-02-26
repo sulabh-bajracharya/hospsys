@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+import cloudinary
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +49,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'channels',
     'video_chat',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -156,6 +160,13 @@ CHANNEL_LAYERS = {
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'sulabh.db@gmail.com'
-EMAIL_HOST_PASSWORD = 'Coplien10@sdb'
+EMAIL_HOST_USER = str(os.getenv('EMAIL_HOST'))
+EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_PASSWORD'))
 EMAIL_PORT = 587
+
+cloudinary.config( 
+  cloud_name = "sulabhbajracharya-cloudinary", 
+  api_key = "765726168393521", 
+  api_secret = "F19DYwMElwKfnkF3ey6JQZUEzSQ",
+  secure = True
+)

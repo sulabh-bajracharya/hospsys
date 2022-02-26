@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, DoctorProfile, Department, DoctorAvailability, WorkingShift
+from .models import User, DoctorProfile, Department, DoctorAvailability, WorkingShift, PatientProfile
 # Register your models here.
 admin.site.register(User)
 admin.site.register(Department)
@@ -15,3 +15,5 @@ class DoctorProfileAdmin(admin.ModelAdmin):
     inlines = [DoctorAvailabilityInline, DoctorWorkingShiftInline]
     
 admin.site.register(DoctorProfile, DoctorProfileAdmin)
+
+admin.site.register(PatientProfile)

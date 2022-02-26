@@ -1,0 +1,72 @@
+{% extends 'accounts/layouts/starter.html' %}
+{% load crispy_forms_tags %}
+{% block title %} Create Appointment{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Edit Appointment</h4>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                <ul class="messages pl-0">
+                    {% for message in messages %}
+            
+                    <p class="alert alert-warning m-0">{{ message }}</p>
+
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p class="bg-info p-3">Please check your doctors availability before making appointments.</p>
+                <form method="post">
+                    <label for="doctor_name">Appointment with Doctor: </label>
+                    <input type="text" name="doctor" id="doctor" class="form-control" value="{{ appointment.doctor }}" readonly><br>
+                    <!-- <p class="form-control bg-light">{{ appointment.doctor.get_full_name }}</p> -->
+                    {% csrf_token %}
+                    {{ edit_form|crispy }}
+                    <input type="submit" class="btn btn-primary" name="create_appointment_submit" value="Update">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-info p-3">
+                <h4 class="card-title">Doctor Availability</h4>
+            </div>
+            <div class="card-body">
+                <label for="doctor_name">Doctor</label>
+                <input type="text" class="form-control" value="{{ doctor.get_full_name }}" readonly><br>
+
+                <div class="doctor-availability">
+                    <table name="view-availability-table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="col-6">Working Days</th>
+                                <th class="col-3">Shift Start Time</th>
+                                <th class="col-3">Shift End Time</th>
+        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for shift in working_shifts %}
+                                <tr>
+                                    <td>{{ shift.working_day }}</td>
+                                    <td>{{ shift.start_time }}</td>
+                                    <td>{{ shift.end_time }}</td>
+                                  
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+
+{% endblock content %}

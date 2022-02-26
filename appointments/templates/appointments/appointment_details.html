@@ -2,15 +2,30 @@
 
 
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header bg-primary">
+                <div class="card-header p-4">
                     <h5 class="m-0">Appointment Details</h5>
                 </div>
 
                 <div class="card-body">
+                    <div>
+                        {% if messages %}
+                        {% for message in messages %}
+
+                        <div class="alert alert-success alert-dismissible fade show col-12" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          {% endfor %}
+
+                    {% endif %}
+                    </div>
+                    
                     <div class="row">
 
                         <div class="col-6">
@@ -54,8 +69,8 @@
                                         <td>{{ appointment.doctor.get_full_name.title }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Address:</td>
-                                        <td>{{ appointment.doctor.doctorprofile.get_full_address }}</td>
+                                        <td>Department</td>
+                                        <td>{{ appointment.doctor.doctorprofile.department }}</td>
                                     </tr>
                                     <tr>
                                         <td>Contact No:</td>
@@ -80,6 +95,14 @@
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>Appointment Date:</td>
+                                        <td>{{ appointment.appointment_date}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Appointment Time:</td>
+                                        <td>{{ appointment.timeslot }}</td>
+                                    </tr>
+                                    <tr>
                                         <td>Reason:</td>
                                         <td>{{ appointment.reason }}</td>
                                     </tr>
@@ -93,11 +116,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12">
-                            <a class="btn btn-lg btn-success" href={% url 'video_chat:video' %}>Join Call</a>
+
+                        <div class="col-12 text-center mb-3">
+                            {% if appointment.approval_status == 'approved' %}
+                            <a class="btn btn-lg btn-success" href="{% url 'video_chat:video' %}">Join Call</a>
+                            {% else %}
+                            <p class="p-3 bg-warning">Your appointment request is pending...</p>
+                           
+                            {% endif %}
                         </div>
+                        
                         <div class="col-12">
-                            <a class="float-right" href={% url 'appointments:delete_appointment' appointment.id %}>Delete this appointment</a>
+                            <a class="float-left btn btn-secondary" href="{% url 'accounts:dashboard' %}">Back</a>
+                            <a class="float-left btn btn-info ml-2" href="{% url 'appointments:edit_appointment' appointment.id %}">Edit</a>
+                            <a class="float-right" href="{% url 'appointments:cancel_appointment' appointment.id %}">Cancel this appointment</a>
                         </div>
                         
                     </div>

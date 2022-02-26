@@ -4,18 +4,40 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-8">
         <div class="card">
-            <div class="card-header bg-primary">
+            <div class="card-header">
+                <h4 class="card-title">Create Appointment</h4>
+            </div>
+            <div class="card-body">
+                {% if messages %}
+                <ul class="messages pl-0">
+                    {% for message in messages %}
+            
+                    <p class="alert alert-warning m-0">{{ message }}</p>
+
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <p class="bg-info p-3">Please check your doctors availability before making appointments.</p>
+                <form method="post">
+                    <label for="doctor_name">Appointment with Doctor: </label>
+                    <input type="text" name="doctor" id="doctor" class="form-control" value="{{ doctor.get_full_name }}" readonly><br>
+                    {% csrf_token %}
+                    {{ create_form|crispy }}
+                    <input type="submit" class="btn btn-primary" name="create_appointment_submit" value="Create Appointment">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-info p-3">
                 <h4 class="card-title">Doctor Availability</h4>
             </div>
             <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ availability_form|crispy }}
-                    <input type="submit" name="availability_submit" value="View Availability">
-                </form>
-                <br>
+                <label for="doctor_name">Doctor</label>
+                <input type="text" class="form-control" value="{{ doctor.get_full_name }}" readonly><br>
 
                 <div class="doctor-availability">
                     <table name="view-availability-table" class="table table-bordered">
@@ -45,29 +67,7 @@
     </div>
 </div>  
 <div class="row">
-    <div class="col-lg-10">
-        <div class="card">
-            <div class="card-header bg-primary">
-                <h4 class="card-title">Create Appointment</h4>
-            </div>
-            <div class="card-body">
-                {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    {% comment %} <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> {% endcomment %}
-                    <p class="alert alert-warning">{{ message }}</p>
-
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                <form method="post">
-                    {% csrf_token %}
-                    {{ create_form|crispy }}
-                    <input type="submit" name="create_appointment_submit" value="Create Appointment">
-                </form>
-            </div>
-        </div>
-    </div>
+   
 </div>
 
 <script>

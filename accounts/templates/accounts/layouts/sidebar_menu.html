@@ -10,14 +10,16 @@
       </p>
     </a>
 </li>
-  <li class="nav-item">
-      <a href="{% url 'accounts:edit_working_shifts' %}" class="nav-link">
-        <i class="nav-icon far fa-image"></i>
-        <p>
-          View/Edit Working Hours
-        </p>
-      </a>
-  </li>
+{% if current_user.doctorprofile.is_nmc_verified %}
+<li class="nav-item">
+    <a href="{% url 'accounts:edit_working_shifts' %}" class="nav-link">
+      <i class="nav-icon far fa-image"></i>
+      <p>
+        View/Edit Working Hours
+      </p>
+    </a>
+</li>
+{% endif %}
 </ul>
 </nav>
 <!-- /.sidebar-menu -->
@@ -36,7 +38,7 @@
         </a>
     </li>
       <li class="nav-item">
-        <a href="{% url 'appointments:create_appointment' %}" class="nav-link">
+        <a href="{% url 'appointments:list_doctors' %}" class="nav-link">
           <i class="nav-icon far fa-image"></i>
           <p>
             Create Appointments

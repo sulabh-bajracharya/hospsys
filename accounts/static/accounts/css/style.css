@@ -1,6 +1,6 @@
 .login-form {
     width: 600px;
-    margin: 300px auto;
+    margin: 0px auto;
     /* padding: 20px; */
 
 }
@@ -35,6 +35,28 @@
     list-style-type: none;
 }
 
+.appointment-card {
+    border: 1px dotted rgba(0, 0, 0, 0.3);
+}
+.appointment-card:hover {
+    box-shadow: 2px 2px 8px 2px rgba(33,33,33, 0,3);
+  
+}
+
 .patient-actions li{
     margin: 8px 0;
+}
+
+.profile_image_actions {
+    position: relative;
+    top: -150px;
+    left: 300px;
+    width: 500px;
+}
+
+.profile_upper_div {
+    height: 300px;
+    background-color: #e9e9e9;
+    border-radius: 12px;
+    padding: 24px;
 }

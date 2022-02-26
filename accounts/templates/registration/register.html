@@ -1,9 +1,15 @@
 {% extends '../base.html'%}
 {% load crispy_forms_tags %}
+{% load static %}
 
 
 {% block title %}Register{%endblock%}
 {% block content %}
+
+<div class="logo-div text-center">
+    <img src="{% static 'accounts/images/logos/logo-black.png' %}" height="400" width="400">
+</div>
+
 <section class="register-form login-form card">
     <div class="card-header">
         <h3 class="text-center">Register to HospSys</h3>
