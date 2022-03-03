@@ -254,13 +254,14 @@ const constraints = {
     'audio': true
 }
 
-const iceConfiguration = {
-    iceServers: [
-        {
-            'urls':'stun:stun.l.google.com',
-        }
-    ]
-};
+// const iceConfiguration = {
+//     iceServers: [
+//         {
+//             'urls':'stun:stun.l.google.com',
+//         }
+//     ]
+// };
+const iceConfiguration = null;
 
 userMedia = navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
