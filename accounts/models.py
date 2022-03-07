@@ -14,7 +14,7 @@ class User(AbstractUser):
     middle_name =  models.CharField(blank=True, max_length=150, verbose_name='middle name')
     email = models.EmailField(max_length=254, verbose_name='email address', unique=True)
     user_type = models.CharField(choices = USER_TYPE_CHOICES, max_length=10, verbose_name='user type')
-    profile_image = CloudinaryField('profile_image', null=True)
+    profile_image = CloudinaryField('profile_image', null=True, blank=True)
     created_at = models.DateTimeField(default=django.utils.timezone.now, verbose_name='created at')
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False, verbose_name='updated at')
 
