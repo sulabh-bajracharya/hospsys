@@ -10,21 +10,21 @@
                 <h4 class="card-title">Doctor Availability</h4>
             </div>
             <div class="card-body">
-                <form method="post">
+                <form method="post" class="form m-3">
                     {% csrf_token %}
-                    {{ form|crispy }}
+                    {{ form }}
                     <input type="submit" class="btn btn-primary" value="View Availability">
                 </form>
                 <br>
 
-                <div class="doctor-availability">
-                    <table name="view-availability-table" class="table table-bordered">
+                <div class="doctor-availability-table row">
+                    <table name="view-availability-table" class="table table-bordered col-6 m-3">
                         <thead>
-                            <tr>
-                                <th class="col-6">Working Days</th>
-                                <th class="col-3">Shift Start Time</th>
-                                <th class="col-3">Shift End Time</th>
-        
+                            <tr class="bg-info">
+                                <th class="">Working Days</th>
+                                <th class="">Shift Start Time</th>
+                                <th class="">Shift End Time</th>
+                                <!-- <th class=""></th> -->
                             </tr>
                         </thead>
                         <tbody>

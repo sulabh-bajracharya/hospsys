@@ -4,7 +4,7 @@
 {% block title %} Working Hours {% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <div class="card">
         <div class="card-header">
             <h3>Edit Working Shifts</h3>
@@ -49,11 +49,11 @@
                 <div class="card-body">
                     <form method="post" class="form">
                         {% csrf_token %}
-                        {{ form.as_table }}       
+                        {{ form }}       
         
                         <input type="submit" value="Save" class="btn btn-primary">
                     </form>
-                </div>"
+                </div>
                 
             </div>
            

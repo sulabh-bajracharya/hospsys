@@ -1,5 +1,6 @@
 from django import forms
 from .models import Appointment
+from accounts.models import WorkingShift, User, DoctorProfile
 from accounts.models import User, DoctorProfile, DoctorAvailability, WorkingShift
 import datetime as dt
 
@@ -25,29 +26,28 @@ TIMESLOT_LIST = (
         (16, '17:00 - 17:30'),
     )
 
-# HOUR_CHOICES = WorkingShift.objects.filter(doctor_profile=)
+# doctor_profile = DoctorProfile.objects.get(doctor=User.objects.get(pk=request.session.pop('doctor_id')))
+# HOUR_CHOICES = WorkingShift.objects.filter(doctor_profile=doctor_profile)
 
 class CreateAppointmentForm(forms.Form):
 
-    # doctor = forms.ModelChoiceField(
-    #     queryset=User.objects.filter(user_type='doctor'),
-    #     widget=forms.Select(attrs={'style': 'width: 500px;padding: 8px; margin-right: 16px;'}))
-    # doctor = forms.CharField()
+    # def __init__(self, *args, **kwargs):
+    #     working_shifts = kwargs.pop('working_shifts', None)
+    #     working_days = []
+    #     for shifts in working_shifts:
+    #         working_days.append(shifts.working_day)
+    #     super(CreateAppointmentForm, self).__init__(*args, **kwargs)
+        # working_shifts = WorkingShift.objects.filter(doctor_profile = instance.doctorprofile)
+        # self.fields['appointment_date'].widget = forms.Select(choices=working_days)
+        # self.fields['appointment_time'].queryset = working_shifts
 
-    # def __init__(self, doctor_id, *args,**kwargs):
-    #     # doctor_id = kwargs.pop('doctor_id')
-    #     super().__init__(*args,**kwargs)
-    #     doctor = User.objects.get(id=doctor_id)
-    #     self.fields['doctor'] = forms.CharField(widget=forms.TextInput(attrs={'value':doctor.get_full_name, 'readonly':True}))
-    #     # self.fields['doctor'].widget = forms.TextInput(attrs={'value': doctor.get_full_name})
 
+    # appointment_date = forms.ModelChoiceField(queryset=WorkingShift.objects.all())
     appointment_date = forms.DateField(widget=forms.DateInput(attrs={'type':'date'}))
-    appointment_time = forms.ChoiceField(widget=forms.Select(attrs={'style': 'width: 200px;padding: 8px; margin-right: 16px;'}), choices = TIMESLOT_LIST)
+    preferred_appointment_time = forms.ChoiceField(widget=forms.Select(attrs={'style': 'width: 200px;padding: 8px; margin-right: 16px;'}), choices = TIMESLOT_LIST)
     reason = forms.CharField(max_length=254)
     description = forms.CharField(widget=forms.Textarea(attrs={"rows":8, "cols":20}))
-        # class Meta:
-        #     model = Appointment
-        #     exclude = ['patient']
+       
 
 class DoctorAvailabilityForm(forms.Form):
     doctor = forms.ModelChoiceField(

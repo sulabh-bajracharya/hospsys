@@ -220,9 +220,11 @@ def edit_working_shifts(request):
             else:
                 form = DoctorWorkingShiftForm()
                 working_shifts = WorkingShift.objects.filter(doctor_profile = request.user.doctorprofile)
+                current_user = request.user
                 context = {
                     'form': form,
                     'working_shifts': working_shifts,
+                    'current_user': current_user,
                 }
             return render(request, 'accounts/change_availability.html', context)
         else:

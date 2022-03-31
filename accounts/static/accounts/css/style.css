@@ -60,3 +60,7 @@
     border-radius: 12px;
     padding: 24px;
 }
+
+.doctor-availability-table table tbody tr td:first-child {
+    background-color: #f0f0f0;
+}

@@ -42,7 +42,7 @@ def create(request, doctor_id):
                 doctor = User.objects.get(pk=doctor_id)
                 patient = request.user
                 appointment_date = form.cleaned_data['appointment_date']
-                appointment_time = form.cleaned_data['appointment_time']
+                appointment_time = form.cleaned_data['preferred_appointment_time']
                 reason = form.cleaned_data['reason']
                 description = form.cleaned_data['description']
 
@@ -53,7 +53,7 @@ def create(request, doctor_id):
 
                 if existing_appointment is not None:
                     # messages.add_message(request, messages.ERROR, 'Appointment with doctor already exists.')
-                    messages.error(request,'You already have an appointment with this doctor.')
+                    messages.error(request,'You already have an appointment with this doctor. Please check your dashboard for your appointments.')
 
                     return HttpResponseRedirect(reverse('appointments:create_appointment', args=(doctor_id,)))
                 else:
@@ -71,6 +71,7 @@ def create(request, doctor_id):
                 return render(request, 'accounts/patient_dashboard.html')
     else:
         doctor = User.objects.get(pk=doctor_id)
+        request.session['doctor_id'] = doctor_id
         working_shifts = WorkingShift.objects.filter(doctor_profile=doctor.doctorprofile)
         create_form = CreateAppointmentForm()
         availability_form = DoctorAvailabilityForm()
