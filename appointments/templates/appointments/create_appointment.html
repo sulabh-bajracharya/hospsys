@@ -19,8 +19,8 @@
                     {% endfor %}
                 </ul>
                 {% endif %}
-                <p class="bg-info p-3">Please check your doctors availability before making appointments.</p>
-                <form method="post">
+                <p class="bg-info p-3">Please check your doctors before making appointments.</p>
+                <form method="post" enctype="multipart/form-data">
                     <label for="doctor_name">Appointment with Doctor: </label>
                     <input type="text" name="doctor" id="doctor" class="form-control" value="{{ doctor.get_full_name }}" readonly><br>
                     {% csrf_token %}

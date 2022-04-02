@@ -3,6 +3,7 @@ from .models import Appointment
 from accounts.models import WorkingShift, User, DoctorProfile
 from accounts.models import User, DoctorProfile, DoctorAvailability, WorkingShift
 import datetime as dt
+from cloudinary.forms import CloudinaryFileField
 
 HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(0, 24)]
 
@@ -47,6 +48,12 @@ class CreateAppointmentForm(forms.Form):
     preferred_appointment_time = forms.ChoiceField(widget=forms.Select(attrs={'style': 'width: 200px;padding: 8px; margin-right: 16px;'}), choices = TIMESLOT_LIST)
     reason = forms.CharField(max_length=254)
     description = forms.CharField(widget=forms.Textarea(attrs={"rows":8, "cols":20}))
+    files = CloudinaryFileField(label='Upload History Files',
+        options = {
+            'folder': 'hospsys/history_files/'
+       },
+       widget=forms.FileInput(attrs={'style':'width: 300px; padding: auto;', 'id':'history_files_upload', 'name':'history_files_upload'}),
+    )
        
 
 class DoctorAvailabilityForm(forms.Form):

@@ -37,7 +37,8 @@ def create(request, doctor_id):
                 }
                 return render(request, 'appointments/create_appointment.html', context)
         if 'create_appointment_submit' in request.POST:
-            form = CreateAppointmentForm(request.POST)
+            form = CreateAppointmentForm(request.POST, request.FILES)
+
             if form.is_valid():
                 doctor = User.objects.get(pk=doctor_id)
                 patient = request.user
@@ -45,6 +46,9 @@ def create(request, doctor_id):
                 appointment_time = form.cleaned_data['preferred_appointment_time']
                 reason = form.cleaned_data['reason']
                 description = form.cleaned_data['description']
+                breakpoint()
+
+                history_files = request.FILES['files'].name
 
                 try:
                     existing_appointment = Appointment.objects.get(doctor=doctor, patient=patient)
@@ -63,7 +67,7 @@ def create(request, doctor_id):
                             messages.error(request, 'The time slot is already booked. Please try another time slot for appointment')
                             return HttpResponseRedirect(reverse('appointments:create_appointment', args=(doctor_id,)))
                             
-                    obj, created = Appointment.objects.update_or_create(patient = patient, doctor=doctor,defaults={'doctor':doctor, 'appointment_date':appointment_date, 'appointment_time': appointment_time, 'reason':reason, 'description':description})
+                    obj, created = Appointment.objects.update_or_create(patient = patient, doctor=doctor,defaults={'doctor':doctor, 'appointment_date':appointment_date, 'appointment_time': appointment_time, 'reason':reason, 'description':description, 'history_files': history_files })
                     if created:
                         return HttpResponseRedirect(reverse('accounts:dashboard'))
             else:

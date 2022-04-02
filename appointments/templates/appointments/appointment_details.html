@@ -110,6 +110,10 @@
                                         <td>Description:</td>
                                         <td>{{ appointment.description }}</td>
                                     </tr>
+                                    <tr>
+                                        <td>User Uploaded Files:</td>
+                                        <td><a href="{{appointment.history_files.url}}">{{ appointment.history_files }}</a></td>
+                                    </tr>
                                     
                                 </tbody>
                             </table>

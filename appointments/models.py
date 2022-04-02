@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import User
+from cloudinary.models import CloudinaryField
+
 
 # Create your models here.
 class Appointment(models.Model):
@@ -37,6 +39,7 @@ class Appointment(models.Model):
     appointment_time = models.IntegerField(default=100, choices=TIMESLOT_LIST)
     reason = models.CharField(max_length=254)
     description = models.TextField(null=True)
+    history_files = models.FileField(upload_to='patient_history_files/', null=True, blank=True)
     approval_status = models.CharField(max_length=10, choices = APPROVAL_STATUS_CHOICES, default='pending')
 
     def __str__(self):
