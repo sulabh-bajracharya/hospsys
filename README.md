@@ -6,8 +6,8 @@
 
 
 ### Database Configuration
-1. Create role with createdb permissions.
-2. Go to postgres command line with psql.
+1. Start Postgresql service.
+2. Login to postgres command line with `psql`.
 3. Create database `hospsys_development`.
 4. Create postgres configuration file in home folder with host, user, password, dbname and port credentials.
 5. Create .pgpass file with postgres login credentials in home folder.
