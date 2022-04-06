@@ -19,6 +19,8 @@
 2. Create python virtual environment using virtualenv inside the folder.
 3. Go to project root folder containing requirements.txt file.
 4. Install project requirements using `pip install -r requrements.txt`.
-5. Apply migrations using `python manage.py migrate`.
-6. Run the project using `python manage.py runserver`.
+5. Create `.env` file at project root folder with `EMAIL_HOST` AND `EMAIL_PASSWORD` keys and respective values for email verification.
+6. Make sure `Postgresql` and `Redis` services are running.
+7. Apply migrations using `python manage.py migrate`.
+8. Run the project using `python manage.py runserver`.
 
